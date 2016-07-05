@@ -1,6 +1,6 @@
 # Machine Learns TicTacToe
 ### Ragul Balaji & Kaelan Miko Summer 2016
-Neural Network That Crowdsources Strategies for TicTacToe!
+A Neural Network That Crowdsources Strategies for Tic Tac Toe!
 
 ![Demo](preview.gif)
 
@@ -9,4 +9,4 @@ Neural Network That Crowdsources Strategies for TicTacToe!
 - Connect to ```http:// < ip/domain > /```
 - Profit / Judgement day ???
 
-###### aka Skynet Alpha Development Version 1 😜
+##### A precursor to Skynet. 😜
