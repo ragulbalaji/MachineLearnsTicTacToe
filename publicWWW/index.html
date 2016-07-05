@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>TicTacToe</title>
+	<title>Machine Learns TicTacToe</title>
 	<!--Import Google Icon Font-->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<!--Import materialize.css-->
@@ -23,23 +23,48 @@
 			width: 10vw;
 		}
 		
+		.ticbtn:hover {
+    	border: 2px solid LawnGreen;
+		}
+		
 		.ticrow {
 			padding: 0;
 			margin: 0;
 		}
 		
+		.socialbtns{
+			position:absolute;
+			margin-left:10px;
+		}
+		
 		.celltext {}
 	</style>
+	<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
 </head>
 
 <body>
+	<div class="socialbtns">
+		<!-- Place this tag where you want the button to render. -->
+		<h4>Be Social!</h4>
+		<a style="margin-bottom:10px;" href="https://github.com/ragulbalaji/MachineLearnsTicTacToe" class="waves-effect waves-light btn"><i class="material-icons left">description</i>GitHub Repo</a>
+		<br><a class="github-button" href="https://github.com/ragulbalaji" data-style="mega" data-count-href="/ragulbalaji/followers" data-count-api="/users/ragulbalaji#followers" data-count-aria-label="# followers on GitHub" aria-label="Follow @ragulbalaji on GitHub">Follow @ragulbalaji</a>
+		<br><a class="github-button" href="https://github.com/klanmiko" data-style="mega" data-count-href="/klanmiko/followers" data-count-api="/users/klanmiko#followers" data-count-aria-label="# followers on GitHub" aria-label="Follow @klanmiko on GitHub">Follow @klanmiko</a>
+		<br><a href="https://ragulbalaji.github.com/" class="waves-effect waves-light btn"><i class="material-icons left">dns</i>Website</a>
+		<br><br>
+		<h5>Neural Network's<br>Stats</5>
+		<br>
+		<h6 id="stats_wins">Wins : -</h6>
+		<h6 id="stats_lose">Lose : -</h6>
+		<h6 id="stats_draw">Draw : -</h6>
+	</div>
 	<div class="container">
 		<center>
 			<h4>Machine Learning To Play Tic Tac Toe!</h4>
-			<p>aka. Skynet Alpha Development Verson 0.0.1</p>
-			<h6>by Ragul Balaji & Kaelan Miko (C) 2016</h6>
+			<p>A Neural Network That Crowdsources Strategies for Tic Tac Toe!</p>
+			<h6>by Ragul Balaji & Kaelan Miko (C) Summer 2016</h6>
 			<br>
-			<div class="chip"> <img id="serverimg" src="https://images.redbullshop.com/is/image/RedBullSalzburg/color-4" alt="Contact Person">Server Status</div>
+			<div class="chip"> <img id="serverimg" src="https://images.redbullshop.com/is/image/RedBullSalzburg/color-4" alt="Contact Person">Artificial Neural Network Server Status</div>
 			<br>
 			<br>
 			<div class="switch">
@@ -73,7 +98,13 @@
 <script type="text/javascript">
 	var game = {
 		machine: {
-			isplayingnow: false
+			isplayingnow: false,
+			currentError: "Undefined",
+			stats: {
+				wins:0,
+				lose:0,
+				draw:0
+			}
 		},
 		isLearning: false,
 		train: {
@@ -95,6 +126,8 @@
 		if (!game.machine.isplayingnow) {
 			$.post("https://machinelearnstoplay-ragulbalaji.c9users.io:8081/traindatain", data, function(e) {
 				console.log("DATA SENT SUCCESSFULLY");
+			}).done(function(){
+				Materialize.toast('Data >> Server', 2000);
 			});
 		}
 	}
@@ -117,8 +150,10 @@
 		updateGameBoard();
 		game.train.move[parseInt($(this).attr("id"))] = 0;
 		//console.log("checkWin() OUTPUT: "+ checkWin());
-		if (checkWin() != -1) {
-			alert((checkWin() == 1 ? "X" : "O") + " Wins!");
+		var win = checkWin();
+		if (win != -1) {
+			alert((win== 1 ? "X" : "O") + " Wins!");
+			$.get("https://machinelearnstoplay-ragulbalaji.c9users.io:8081/"+(win==1 ? "lose" : "win"));
 			game.train.board = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
 			game.machine.isplayingnow = false;
 			game.train.currentPlayer = "X";
@@ -130,6 +165,7 @@
 			game.machine.isplayingnow = false;
 			game.train.currentPlayer = "X";
 			updateGameBoard();
+			$.get("https://machinelearnstoplay-ragulbalaji.c9users.io:8081/draw");
 		}
 		else {
 			if (!game.isLearning && !game.machine.isplayingnow) { // THIS IS NOT A LEARNING GAME, REKT THAT PLAYER!
@@ -138,6 +174,7 @@
 				//CLICK THE BUTTON THAT THE NEURAL NETWORK HAS CHOSEN
 				$.post("https://machinelearnstoplay-ragulbalaji.c9users.io:8081/guess", game.train, function(inx) {
 					console.log("Guess from Server = " +  inx);
+					Materialize.toast('Machine Guesses ' + inx, 2000);
 					document.getElementById(inx).click();
 				});
 
@@ -200,17 +237,25 @@
 
 	setInterval(checkServerOnline, 2000);
 	function checkServerOnline(){
-		$.get( "https://machinelearnstoplay-ragulbalaji.c9users.io:8081/isonline", function( data ) {
-  		if(data.toString().localeCompare('yes') == 0){ //Server is Online :)
-  			$("#serverimg").attr("src", imgsrc.green)
-  			if(connectAnim.zz){connectAnim.zz = false; clearInterval(connectAnim.id);}
+		$.get( "https://machinelearnstoplay-ragulbalaji.c9users.io:8081/stats", function( data ) {
+  		//if(data.toString().localeCompare('yes') == 0){ //Server is Online :)
+  		
+  		console.log(data)
+  		game.machine.stats = JSON.parse(data);
+  		$("#stats_wins").html("Wins : " + game.machine.stats.wins);
+  		$("#stats_lose").html("Lose : " + game.machine.stats.lose);
+  		$("#stats_draw").html("Draw : " + game.machine.stats.draw);
+  		$("#serverimg").attr("src", imgsrc.green)
+  		if(connectAnim.zz){connectAnim.zz = false; clearInterval(connectAnim.id); Materialize.toast('Server Connected :)', 2000);}
   			//console.log("Server Up :)")
-  		}else{
+  		//}
+  		/*else{
   			$("#serverimg").attr("src", imgsrc.red)
   			console.log("Server Down :(")
-  		}
+  		}*/
 		}).fail(function() {
   		console.log( "isonline :: error" );
+  		Materialize.toast('Server Error', 2000);
   		if(!connectAnim.zz){
   			connectAnim = {
 					state: 0,
