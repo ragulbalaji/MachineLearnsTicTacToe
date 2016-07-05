@@ -1,0 +1,255 @@
+<html>
+
+<head>
+	<title>TicTacToe</title>
+	<!--Import Google Icon Font-->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+	<!-- Compiled and minified JavaScript -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+	<style>
+		.ticbtn {
+			border: 1px solid #eee;
+			margin: 5px;
+			text-align: center;
+			line-height: 50px;
+			font-size: 6vw;
+			background-color: #aaa;
+			color: white;
+			padding: 3vw;
+			height: 10vw;
+			width: 10vw;
+		}
+		
+		.ticrow {
+			padding: 0;
+			margin: 0;
+		}
+		
+		.celltext {}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<center>
+			<h4>Machine Learning To Play Tic Tac Toe!</h4>
+			<p>aka. Skynet Alpha Development Verson 0.0.1</p>
+			<h6>by Ragul Balaji & Kaelan Miko (C) 2016</h6>
+			<br>
+			<div class="chip"> <img id="serverimg" src="https://images.redbullshop.com/is/image/RedBullSalzburg/color-4" alt="Contact Person">Server Status</div>
+			<br>
+			<br>
+			<div class="switch">
+				<label>
+        Play
+        <input type="checkbox" id="gameMode" onchange="gameMode(this)">
+        <span class="lever"></span>
+        Learn
+        </label>
+			</div>
+			<br>
+			<div class="row ticrow">
+				<div class="ticbtn waves-effect waves-light" id="0"></div>
+				<div class="ticbtn waves-effect waves-light" id="1"></div>
+				<div class="ticbtn waves-effect waves-light" id="2"></div>
+			</div>
+			<div class="row ticrow">
+				<div class="ticbtn waves-effect waves-light" id="3"></div>
+				<div class="ticbtn waves-effect waves-light" id="4"></div>
+				<div class="ticbtn waves-effect waves-light" id="5"></div>
+			</div>
+			<div class="row ticrow">
+				<div class="ticbtn waves-effect waves-light" id="6"></div>
+				<div class="ticbtn waves-effect waves-light" id="7"></div>
+				<div class="ticbtn waves-effect waves-light" id="8"></div>
+			</div>
+	</div>
+	</center>
+	</div>
+</body>
+<script type="text/javascript">
+	var game = {
+		machine: {
+			isplayingnow: false
+		},
+		isLearning: false,
+		train: {
+			currentPlayer: "X",
+			board: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
+			move: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	}
+	
+	var imgsrc = {
+		green : "https://cdn.shopify.com/s/files/1/0182/8585/files/green_thumb.jpg?5619798948101824493",
+		red : "https://images.redbullshop.com/is/image/RedBullSalzburg/color-4"
+	}
+
+	updateGameBoard(); // INIT / CLEAR
+	var machinemoveindex;
+
+	function trainDATAsend(data) {
+		if (!game.machine.isplayingnow) {
+			$.post("https://machinelearnstoplay-ragulbalaji.c9users.io:8081/traindatain", data, function(e) {
+				console.log("DATA SENT SUCCESSFULLY");
+			});
+		}
+	}
+	$(".ticbtn").click(function() {
+		game.train.move[parseInt($(this).attr("id"))] = 1;
+		trainDATAsend(game.train);
+		if (game.train.board[parseInt($(this).attr("id"))] === 0.5) {
+			switch (game.train.currentPlayer) {
+				case "X":
+					game.train.board[parseInt($(this).attr("id"))] = 1;
+					game.train.currentPlayer = "O";
+					break;
+				case "O":
+					game.train.board[parseInt($(this).attr("id"))] = 0;
+					game.train.currentPlayer = "X";
+					break;
+			}
+		}
+		setBoardColor((game.train.currentPlayer == "X" ? "Crimson" : "DarkSlateBlue"));
+		updateGameBoard();
+		game.train.move[parseInt($(this).attr("id"))] = 0;
+		//console.log("checkWin() OUTPUT: "+ checkWin());
+		if (checkWin() != -1) {
+			alert((checkWin() == 1 ? "X" : "O") + " Wins!");
+			game.train.board = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
+			game.machine.isplayingnow = false;
+			game.train.currentPlayer = "X";
+			updateGameBoard();
+		}
+		else if (full()) {
+			alert("draw");
+			game.train.board = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
+			game.machine.isplayingnow = false;
+			game.train.currentPlayer = "X";
+			updateGameBoard();
+		}
+		else {
+			if (!game.isLearning && !game.machine.isplayingnow) { // THIS IS NOT A LEARNING GAME, REKT THAT PLAYER!
+				game.machine.isplayingnow = true;
+				//GET GUESS FROM SERVER
+				//CLICK THE BUTTON THAT THE NEURAL NETWORK HAS CHOSEN
+				$.post("https://machinelearnstoplay-ragulbalaji.c9users.io:8081/guess", game.train, function(inx) {
+					console.log("Guess from Server = " +  inx);
+					document.getElementById(inx).click();
+				});
+
+				// Avoid Infinite AI vs AI loop haha it's cause you call .click, which calls this function hence recursion hel
+			}
+			else if (game.machine.isplayingnow) {
+				game.machine.isplayingnow = false;
+			}
+		}
+	});
+
+	function updateGameBoard() {
+		for (var i = 0; i < 9; i++) {
+			$("#" + i).html(getChar(game.train.board[i]));
+		}
+	}
+
+	function full() {
+		var x = true;
+		game.train.board.forEach(function(e) {
+			if (e === 0.5) {
+				x = false;
+			}
+		});
+		return x;
+	}
+
+	function getChar(a) {
+		switch (a) {
+			case 0.5:
+				return " ";
+				break;
+			case 0:
+				return "O";
+				break;
+			case 1:
+				return "X";
+				break;
+		}
+	}
+
+	function checkWin() {
+		for (var i = 0; i < 3; i++) {
+			if (game.train.board[(3 * i) + 0] !== 0.5 && game.train.board[(3 * i) + 0] === game.train.board[(3 * i) + 1] && game.train.board[(3 * i) + 1] === game.train.board[(3 * i) + 2]) {
+				return game.train.board[(3 * i) + 0];
+			}
+			if (game.train.board[i] !== 0.5 && game.train.board[i] === game.train.board[3 + i] && game.train.board[3 + i] === game.train.board[6 + i]) {
+				return game.train.board[i];
+			}
+		}
+		if (game.train.board[0] !== 0.5 && game.train.board[0] === game.train.board[4] && game.train.board[4] === game.train.board[8]) {
+			return game.train.board[0];
+		}
+		if (game.train.board[2] !== 0.5 && game.train.board[2] === game.train.board[4] && game.train.board[4] === game.train.board[6]) {
+			return game.train.board[2];
+		}
+		return -1;
+	}
+
+
+	setInterval(checkServerOnline, 2000);
+	function checkServerOnline(){
+		$.get( "https://machinelearnstoplay-ragulbalaji.c9users.io:8081/isonline", function( data ) {
+  		if(data.toString().localeCompare('yes') == 0){ //Server is Online :)
+  			$("#serverimg").attr("src", imgsrc.green)
+  			if(connectAnim.zz){connectAnim.zz = false; clearInterval(connectAnim.id);}
+  			//console.log("Server Up :)")
+  		}else{
+  			$("#serverimg").attr("src", imgsrc.red)
+  			console.log("Server Down :(")
+  		}
+		}).fail(function() {
+  		console.log( "isonline :: error" );
+  		if(!connectAnim.zz){
+  			connectAnim = {
+					state: 0,
+					zz: true,
+					id: setInterval(serverConnectAnim, 200)
+				}
+  		}
+  	});
+	}
+	
+	var connectAnim = {
+		state: 0,
+		zz: true,
+		id: setInterval(serverConnectAnim, 200)
+	}
+	function serverConnectAnim(){
+		switch (connectAnim.state) {
+			case 0:
+				$("#serverimg").attr("src", imgsrc.green)
+				connectAnim.state = 1;
+				break;
+			case 1:
+				$("#serverimg").attr("src", imgsrc.red)
+				connectAnim.state = 0;
+				break;
+		}
+	}
+
+	function gameMode(obj) {
+		game.isLearning = obj.checked;
+	}
+
+	function setBoardColor(colorHex) {
+		$(".ticbtn").css("background-color", colorHex);
+	}
+
+	function getRandomHexColor() {
+		return '#' + Math.floor(Math.random() * 16777215).toString(16);
+	}
+</script>
+
+</html>
