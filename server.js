@@ -12,6 +12,7 @@
 
 var synaptic = require('synaptic');// this line is not needed in the browser
 var express = require('express');
+//require("./duplicates.js");
 var fs = require('fs');
 var S = require('string');
 //var stats = require('./statistics.js');
@@ -51,9 +52,9 @@ fs.readFile("data/trainingdata.json",function(err,data){
     if(trainingSet.length>10)
     {
         trainer.train(trainingSet,{
-           rate:0.05,
+           rate:0.01,
            iterations:10000,
-           log:200,
+           log:250,
            error:0.05,
            cost:Trainer.cost.CROSS_ENTROPY
         });
@@ -64,7 +65,7 @@ fs.readFile("data/trainingdata.json",function(err,data){
 Perceptron.prototype = new Network();
 Perceptron.prototype.constructor = Perceptron;
 //
-var myPerceptron = new Perceptron(9,18,9);
+var myPerceptron = new Perceptron(9,81,9);
 var trainer = new Trainer(myPerceptron);
 function flipCell(cell,index,board)
 {
