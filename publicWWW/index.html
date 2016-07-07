@@ -58,6 +58,10 @@
 		<h6 id="stats_wins">Wins : -</h6>
 		<h6 id="stats_lose">Lose : -</h6>
 		<h6 id="stats_draw">Draw : -</h6>
+		<br><br>
+		<h5>Game Options</h5>
+		<a style="margin-bottom:10px;" onclick="computerStart()" class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Computer Start</a>
+		<br><a onclick="playerStart()" class="waves-effect waves-light btn"><i class="material-icons left">perm_identity</i>Player Start</a>
 	</div>
 	<div class="container">
 		<center>
@@ -92,7 +96,6 @@
 				<div class="ticbtn waves-effect waves-light" id="7"></div>
 				<div class="ticbtn waves-effect waves-light" id="8"></div>
 			</div>
-	</div>
 	</center>
 	</div>
 </body>
@@ -156,7 +159,8 @@
 		var win = checkWin();
 		if (win != -1) {
 			alert((win== 1 ? "X" : "O") + " Wins!");
-			$.get(nodeurl+"/"+(win==1 ? "lose" : "win"));
+			if((!game.isLearning)&&(!game.machine.isplayingnow)) $.get(nodeurl+"/"+(win==1 ? "lose" : "win"));
+			else if((!game.isLearning)&&(game.machine.isplayingnow)) $.get(nodeurl+"/"+(win==1 ? "win" : "lose"));
 			game.train.board = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
 			game.machine.isplayingnow = false;
 			game.train.currentPlayer = "X";
@@ -168,7 +172,7 @@
 			game.machine.isplayingnow = false;
 			game.train.currentPlayer = "X";
 			updateGameBoard();
-			$.get(nodeurl+"/draw");
+			if(!game.isLearning) $.get(nodeurl+"/draw");
 		}
 		else {
 			if (!game.isLearning && !game.machine.isplayingnow) { // THIS IS NOT A LEARNING GAME, REKT THAT PLAYER!
@@ -218,7 +222,22 @@
 				break;
 		}
 	}
-
+	function computerStart()
+	{
+		game.machine.isplayingnow=true;
+		$.post(nodeurl+"/guess", game.train, function(inx) {
+					console.log("Guess from Server = " +  inx);
+					Materialize.toast('Machine Guesses ' + inx, 2000);
+					document.getElementById(inx).click();
+				});
+	}
+	function playerStart()
+	{
+		game.train.board = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
+			game.machine.isplayingnow = false;
+			game.train.currentPlayer = "X";
+			updateGameBoard();
+	}
 	function checkWin() {
 		for (var i = 0; i < 3; i++) {
 			if (game.train.board[(3 * i) + 0] !== 0.5 && game.train.board[(3 * i) + 0] === game.train.board[(3 * i) + 1] && game.train.board[(3 * i) + 1] === game.train.board[(3 * i) + 2]) {
@@ -236,7 +255,6 @@
 		}
 		return -1;
 	}
-
 
 	setInterval(checkServerOnline, 2000);
 	function checkServerOnline(){

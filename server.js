@@ -12,7 +12,7 @@
 
 var synaptic = require('synaptic');// this line is not needed in the browser
 var express = require('express');
-//require("./duplicates.js");
+require("./duplicates.js");
 var fs = require('fs');
 var S = require('string');
 //var stats = require('./statistics.js');
@@ -53,7 +53,7 @@ fs.readFile("data/trainingdata.json",function(err,data){
     {
         trainer.train(trainingSet,{
            rate:0.01,
-           iterations:10000,
+           iterations:100000,// This seem very very excessive
            log:250,
            error:0.05,
            cost:Trainer.cost.CROSS_ENTROPY
