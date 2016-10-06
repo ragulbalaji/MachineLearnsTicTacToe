@@ -18,6 +18,8 @@ var synaptic = require('synaptic'),
     S = require('string'),
     duplicates = require("./app/duplicates.js"),
     stats = require('./app/statistics.js');
+    
+const expressPort = 8081;
 
 app.use(express.static(__dirname + '/public'));
 
@@ -43,8 +45,8 @@ app.post('/traindatain',function(req, res) {
   res.sendStatus(200);
 });
 
-app.listen(8081, function() {
-  console.log("express is running");
+app.listen(expressPort, function() {
+  console.log("Express is running on port "+expressPort);
 });
 
 app.get('/win',function(req, res) {
