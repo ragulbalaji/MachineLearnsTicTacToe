@@ -1,0 +1,27 @@
+
+.ticbtn {
+  border: 1px solid #eee;
+  margin: 5px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 6vw;
+  background-color: #aaa;
+  color: white;
+  padding: 3vw;
+  height: 10vw;
+  width: 10vw;
+}
+
+.ticbtn:hover {
+  border: 2px solid LawnGreen;
+}
+
+.ticrow {
+  padding: 0;
+  margin: 0;
+}
+
+.socialbtns{
+  position:absolute;
+  margin-left:10px;
+}

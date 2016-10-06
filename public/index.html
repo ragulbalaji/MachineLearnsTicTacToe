@@ -1,86 +1,75 @@
+<!DOCTYPE html>
 <html>
-
 <head>
+	<meta charset="utf-8">
+	<!-- Get mobile friendly :-) -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Machine Learns TicTacToe</title>
+	<!-- Project stylesheet -->
+	<link rel="stylesheet" href="./assets/css/styles.css">
 	<!--Import Google Icon Font-->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<!--Import materialize.css-->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
-	<!-- Compiled and minified JavaScript -->
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chance/1.0.3/chance.min.js"></script>
-	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
-	<style>
-		.ticbtn {
-			border: 1px solid #eee;
-			margin: 5px;
-			text-align: center;
-			line-height: 50px;
-			font-size: 6vw;
-			background-color: #aaa;
-			color: white;
-			padding: 3vw;
-			height: 10vw;
-			width: 10vw;
-		}
-		
-		.ticbtn:hover {
-    	border: 2px solid LawnGreen;
-		}
-		
-		.ticrow {
-			padding: 0;
-			margin: 0;
-		}
-		
-		.socialbtns{
-			position:absolute;
-			margin-left:10px;
-		}
-		
-		.celltext {}
-	</style>
-	<!-- Place this tag in your head or just before your close body tag. -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
+	<link rel="stylesheet" href="./libs/materialize/dist/css/materialize.min.css">
 </head>
-
 <body>
 	<div class="socialbtns">
 		<!-- Place this tag where you want the button to render. -->
 		<h4>Be Social!</h4>
-		<a style="margin-bottom:10px;" href="https://github.com/ragulbalaji/MachineLearnsTicTacToe" class="waves-effect waves-light btn"><i class="material-icons left">description</i>GitHub Repo</a>
-		<br><a class="github-button" href="https://github.com/ragulbalaji" data-style="mega" data-count-href="/ragulbalaji/followers" data-count-api="/users/ragulbalaji#followers" data-count-aria-label="# followers on GitHub" aria-label="Follow @ragulbalaji on GitHub">Follow @ragulbalaji</a>
-		<br><a class="github-button" href="https://github.com/klanmiko" data-style="mega" data-count-href="/klanmiko/followers" data-count-api="/users/klanmiko#followers" data-count-aria-label="# followers on GitHub" aria-label="Follow @klanmiko on GitHub">Follow @klanmiko</a>
-		<br><a href="https://ragulbalaji.github.com/" class="waves-effect waves-light btn"><i class="material-icons left">dns</i>Website</a>
-		<br><br>
-		<h5>Neural Network's<br>Stats</5>
-		<br>
+		<a style="margin-bottom:10px;" href="https://github.com/ragulbalaji/MachineLearnsTicTacToe" class="waves-effect waves-light btn">
+			<i class="material-icons left">description</i> GitHub Repo
+		</a>
+		<br />
+		<a class="github-button" href="https://github.com/ragulbalaji" data-style="mega" data-count-href="/ragulbalaji/followers" data-count-api="/users/ragulbalaji#followers" data-count-aria-label="# followers on GitHub" aria-label="Follow @ragulbalaji on GitHub">
+			Follow @ragulbalaji
+		</a>
+		<br />
+		<a class="github-button" href="https://github.com/klanmiko" data-style="mega" data-count-href="/klanmiko/followers" data-count-api="/users/klanmiko#followers" data-count-aria-label="# followers on GitHub" aria-label="Follow @klanmiko on GitHub">
+			Follow @klanmiko
+		</a>
+		<br />
+		<a href="https://ragulbalaji.github.com/" class="waves-effect waves-light btn">
+			<i class="material-icons left">dns</i>
+			Website
+		</a>
+		<br />
+		<br />
+		<h5>Neural Network's <br /> Stats</h5>
+		<br />
 		<h6 id="stats_wins">Wins : -</h6>
 		<h6 id="stats_lose">Lose : -</h6>
 		<h6 id="stats_draw">Draw : -</h6>
-		<br><br>
+		<br />
+		<br />
 		<h5>Game Options</h5>
-		<a style="margin-bottom:10px;" onclick="computerStart()" class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Computer Start</a>
-		<br><a onclick="playerStart()" class="waves-effect waves-light btn"><i class="material-icons left">perm_identity</i>Player Start</a>
+		<a style="margin-bottom:10px;" onclick="computerStart()" class="waves-effect waves-light btn">
+			<i class="material-icons left">cloud</i> Computer Start
+		</a>
+		<br />
+		<a onclick="playerStart()" class="waves-effect waves-light btn">
+			<i class="material-icons left">perm_identity</i> Player Start
+		</a>
 	</div>
 	<div class="container">
 		<center>
 			<h4>Machine Learning To Play Tic Tac Toe!</h4>
 			<p>A Neural Network That Crowdsources Strategies for Tic Tac Toe!</p>
-			<h6>by Ragul Balaji & Kaelan Miko (C) Summer 2016</h6>
-			<br>
-			<div class="chip"> <img id="serverimg" src="https://images.redbullshop.com/is/image/RedBullSalzburg/color-4" alt="Contact Person">Artificial Neural Network Server Status</div>
-			<br>
-			<br>
+			<h6>by Ragul Balaji &amp; Kaelan Miko (C) Summer 2016</h6>
+			<br />
+			<div class="chip">
+				<img id="serverimg" src="https://images.redbullshop.com/is/image/RedBullSalzburg/color-4" alt="Contact Person" /> Artificial Neural Network Server Status
+			</div>
+			<br />
+			<br />
 			<div class="switch">
 				<label>
-        Play
-        <input type="checkbox" id="gameMode" onchange="gameMode(this)">
-        <span class="lever"></span>
-        Learn
-        </label>
+					Play
+					<input type="checkbox" id="gameMode" onchange="gameMode(this)" />
+					<span class="lever"></span>
+					Learn
+				</label>
 			</div>
-			<br>
+			<br />
 			<div class="row ticrow">
 				<div class="ticbtn waves-effect waves-light" id="0"></div>
 				<div class="ticbtn waves-effect waves-light" id="1"></div>
@@ -96,240 +85,25 @@
 				<div class="ticbtn waves-effect waves-light" id="7"></div>
 				<div class="ticbtn waves-effect waves-light" id="8"></div>
 			</div>
-	</center>
+		</center>
 	</div>
+	<!-- Compiled and minified JavaScript -->
+	<script type="text/javascript" src="./libs/materialize/dist/js/materialize.min.js"></script>
+	<script type="text/javascript" src="./libs/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="./libs/chance/dist/chance.min.js"></script>
+	<!-- Place this tag in your head or just before your close body tag. -->
+	<script async defer src="https://buttons.github.io/buttons.js"></script>
+	<!-- Personal scripts -->
+	<script type="text/javascript" src="./js/user.js"></script>
+	<script type="text/javascript" src="./js/script.js"></script>
+	<!-- Google Analytics Script -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-9316500-14', 'auto');
+		ga('send', 'pageview');
+	</script>
 </body>
-<script type="text/javascript">
-	var nodeurl = "https://machinelearnstoplay-ragulbalaji.c9users.io:8081";
-	
-	var game = {
-		machine: {
-			isplayingnow: false,
-			currentError: "Undefined",
-			stats: {
-				wins:0,
-				lose:0,
-				draw:0
-			}
-		},
-		isLearning: false,
-		train: {
-			currentPlayer: "X",
-			board: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
-			move: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		}
-	}
-	
-	var imgsrc = {
-		green : "https://cdn.shopify.com/s/files/1/0182/8585/files/green_thumb.jpg?5619798948101824493",
-		red : "https://images.redbullshop.com/is/image/RedBullSalzburg/color-4"
-	}
-
-	updateGameBoard(); // INIT / CLEAR
-	var machinemoveindex;
-
-	function trainDATAsend(data) {
-		if (!game.machine.isplayingnow) {
-			$.post(nodeurl+"/traindatain", data, function(e) {
-				console.log("DATA SENT SUCCESSFULLY");
-			}).done(function(){
-				Materialize.toast('Data >> Server', 2000);
-			});
-		}
-	}
-	$(".ticbtn").click(function() {
-		game.train.move[parseInt($(this).attr("id"))] = 1;
-		trainDATAsend(game.train);
-		if (game.train.board[parseInt($(this).attr("id"))] === 0.5) {
-			switch (game.train.currentPlayer) {
-				case "X":
-					game.train.board[parseInt($(this).attr("id"))] = 1;
-					game.train.currentPlayer = "O";
-					break;
-				case "O":
-					game.train.board[parseInt($(this).attr("id"))] = 0;
-					game.train.currentPlayer = "X";
-					break;
-			}
-		}
-		setBoardColor((game.train.currentPlayer == "X" ? "Crimson" : "DarkSlateBlue"));
-		updateGameBoard();
-		game.train.move[parseInt($(this).attr("id"))] = 0;
-		//console.log("checkWin() OUTPUT: "+ checkWin());
-		var win = checkWin();
-		if (win != -1) {
-			alert((win== 1 ? "X" : "O") + " Wins!");
-			if((!game.isLearning)&&(!game.machine.isplayingnow)) $.get(nodeurl+"/"+(win==1 ? "lose" : "win"));
-			else if((!game.isLearning)&&(game.machine.isplayingnow)) $.get(nodeurl+"/"+(win==1 ? "win" : "lose"));
-			game.train.board = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
-			game.machine.isplayingnow = false;
-			game.train.currentPlayer = "X";
-			updateGameBoard();
-		}
-		else if (full()) {
-			alert("draw");
-			game.train.board = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
-			game.machine.isplayingnow = false;
-			game.train.currentPlayer = "X";
-			updateGameBoard();
-			if(!game.isLearning) $.get(nodeurl+"/draw");
-		}
-		else {
-			if (!game.isLearning && !game.machine.isplayingnow) { // THIS IS NOT A LEARNING GAME, REKT THAT PLAYER!
-				game.machine.isplayingnow = true;
-				//GET GUESS FROM SERVER
-				//CLICK THE BUTTON THAT THE NEURAL NETWORK HAS CHOSEN
-				$.post(nodeurl+"/guess", game.train, function(inx) {
-					console.log("Guess from Server = " +  inx);
-					Materialize.toast('Machine Guesses ' + inx, 2000);
-					document.getElementById(inx).click();
-				});
-
-				// Avoid Infinite AI vs AI loop haha it's cause you call .click, which calls this function hence recursion hel
-			}
-			else if (game.machine.isplayingnow) {
-				game.machine.isplayingnow = false;
-			}
-		}
-	});
-
-	function updateGameBoard() {
-		for (var i = 0; i < 9; i++) {
-			$("#" + i).html(getChar(game.train.board[i]));
-		}
-	}
-
-	function full() {
-		var x = true;
-		game.train.board.forEach(function(e) {
-			if (e === 0.5) {
-				x = false;
-			}
-		});
-		return x;
-	}
-
-	function getChar(a) {
-		switch (a) {
-			case 0.5:
-				return " ";
-				break;
-			case 0:
-				return "O";
-				break;
-			case 1:
-				return "X";
-				break;
-		}
-	}
-	function computerStart()
-	{
-		game.machine.isplayingnow=true;
-		$.post(nodeurl+"/guess", game.train, function(inx) {
-					console.log("Guess from Server = " +  inx);
-					Materialize.toast('Machine Guesses ' + inx, 2000);
-					document.getElementById(inx).click();
-				});
-	}
-	function playerStart()
-	{
-		game.train.board = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
-			game.machine.isplayingnow = false;
-			game.train.currentPlayer = "X";
-			updateGameBoard();
-	}
-	function checkWin() {
-		for (var i = 0; i < 3; i++) {
-			if (game.train.board[(3 * i) + 0] !== 0.5 && game.train.board[(3 * i) + 0] === game.train.board[(3 * i) + 1] && game.train.board[(3 * i) + 1] === game.train.board[(3 * i) + 2]) {
-				return game.train.board[(3 * i) + 0];
-			}
-			if (game.train.board[i] !== 0.5 && game.train.board[i] === game.train.board[3 + i] && game.train.board[3 + i] === game.train.board[6 + i]) {
-				return game.train.board[i];
-			}
-		}
-		if (game.train.board[0] !== 0.5 && game.train.board[0] === game.train.board[4] && game.train.board[4] === game.train.board[8]) {
-			return game.train.board[0];
-		}
-		if (game.train.board[2] !== 0.5 && game.train.board[2] === game.train.board[4] && game.train.board[4] === game.train.board[6]) {
-			return game.train.board[2];
-		}
-		return -1;
-	}
-
-	setInterval(checkServerOnline, 2000);
-	function checkServerOnline(){
-		$.get( nodeurl+"/stats", function( data ) {
-  		//if(data.toString().localeCompare('yes') == 0){ //Server is Online :)
-  		
-  		console.log(data)
-  		game.machine.stats = JSON.parse(data);
-  		$("#stats_wins").html("Wins : " + game.machine.stats.wins);
-  		$("#stats_lose").html("Lose : " + game.machine.stats.lose);
-  		$("#stats_draw").html("Draw : " + game.machine.stats.draw);
-  		$("#serverimg").attr("src", imgsrc.green)
-  		if(connectAnim.zz){connectAnim.zz = false; clearInterval(connectAnim.id); Materialize.toast('Server Connected :)', 2000);}
-  			//console.log("Server Up :)")
-  		//}
-  		/*else{
-  			$("#serverimg").attr("src", imgsrc.red)
-  			console.log("Server Down :(")
-  		}*/
-		}).fail(function() {
-  		console.log( "isonline :: error" );
-  		Materialize.toast('Server Error', 2000);
-  		if(!connectAnim.zz){
-  			connectAnim = {
-					state: 0,
-					zz: true,
-					id: setInterval(serverConnectAnim, 200)
-				}
-  		}
-  	});
-	}
-	
-	var connectAnim = {
-		state: 0,
-		zz: true,
-		id: setInterval(serverConnectAnim, 200)
-	}
-	function serverConnectAnim(){
-		switch (connectAnim.state) {
-			case 0:
-				$("#serverimg").attr("src", imgsrc.green)
-				connectAnim.state = 1;
-				break;
-			case 1:
-				$("#serverimg").attr("src", imgsrc.red)
-				connectAnim.state = 0;
-				break;
-		}
-	}
-
-	function gameMode(obj) {
-		game.isLearning = obj.checked;
-	}
-
-	function setBoardColor(colorHex) {
-		$(".ticbtn").css("background-color", colorHex);
-	}
-
-	function getRandomHexColor() {
-		return '#' + Math.floor(Math.random() * 16777215).toString(16);
-	}
-	
-</script>
-<script type="text/javascript">
-	//User Labelling & Tracking Script from ragul <3
-	function userCheckIn(){var uid=getLocalStorageStuff("id");document.title+=" @ "+uid;}function getLocalStorageStuff(a){b=localStorage.getItem(a);if(b==null){if(a=="id"){localStorage.setItem(a,makeNewUserID());}else{localStorage.setItem(a,0);}}return localStorage.getItem(a);}function makeNewUserID(){return chance.color({format: 'name'}) + "" + chance.age();}userCheckIn();
-</script>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-9316500-14', 'auto');
-  ga('send', 'pageview');
-
-</script>
 </html>
