@@ -16,8 +16,8 @@ var synaptic = require('synaptic'),
     bodyParser = require('body-parser'),
     fs = require('fs'),
     S = require('string'),
-    duplicates = require("./duplicates.js"),
-    stats = require('./statistics.js');
+    duplicates = require("./app/duplicates.js"),
+    stats = require('./app/statistics.js');
 
 app.use(express.static(__dirname + '/public'));
 
@@ -33,33 +33,35 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-app.post('/guess',function(req,res){
+app.post('/guess', function(req, res) {
   var guess = makeGuess(req.body);
   res.json(guess);
 });
-app.post('/traindatain',function(req,res){
+
+app.post('/traindatain',function(req, res) {
   learnMove(req.body)
   res.sendStatus(200);
 });
-/*app.get('/isonline', function(req, res) {  //Depreciated
-res.send('yes');
-});*/
-app.listen(8081,function(){
+
+app.listen(8081, function() {
   console.log("express is running");
 });
-app.get('/win',function(req,res){
+
+app.get('/win',function(req, res) {
   stats.stats.addWin();
   res.send("win ok")
 });
-app.get('/lose',function(req,res){
+
+app.get('/lose',function(req, res) {
   stats.stats.addLose();
   res.send("lose ok")
 });
-app.get('/draw',function(req,res){
+
+app.get('/draw', function(req,res) {
   stats.stats.addDraw();
   res.send("draw ok")
 });
 
-app.get('/stats',function(req,res){
+app.get('/stats',function(req, res) {
   res.send(JSON.stringify(stats.loadStats()));
 });
