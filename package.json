@@ -1,0 +1,26 @@
+{
+  "name": "machinelearnstictactoe",
+  "version": "1.0.0",
+  "description": "Neural Network That Crowdsources Strategies for TicTacToe!",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ragulbalaji/MachineLearnsTicTacToe.git"
+  },
+  "author": "ragulbalaji",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ragulbalaji/MachineLearnsTicTacToe/issues"
+  },
+  "homepage": "https://github.com/ragulbalaji/MachineLearnsTicTacToe#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "string": "^3.3.1",
+    "synaptic": "^1.0.8"
+  }
+}
