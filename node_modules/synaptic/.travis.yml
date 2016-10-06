@@ -1,8 +1,0 @@
- language: node_js
- node_js:
-    # always latest release
-    - "node"
-    # previous releases
-    - "6"
-    - "5"
-    - "4"
