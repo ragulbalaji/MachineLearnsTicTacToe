@@ -1,4 +1,4 @@
-var nodeurl = "https://machinelearnstoplay-ragulbalaji.c9users.io:8081";
+var nodeurl = window.location.href;
 
 var game = {
   machine : {
@@ -19,8 +19,8 @@ var game = {
 };
 
 var imgsrc = {
-  green : "https://cdn.shopify.com/s/files/1/0182/8585/files/green_thumb.jpg?5619798948101824493",
-  red : "https://images.redbullshop.com/is/image/RedBullSalzburg/color-4"
+  green : "./assets/color-green.jpg",
+  red   : "./assets/color-red.jpeg"
 };
 
 updateGameBoard(); // INIT / CLEAR
