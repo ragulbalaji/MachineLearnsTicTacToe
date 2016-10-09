@@ -7,7 +7,7 @@ var Neuron = synaptic.Neuron,
     Trainer = synaptic.Trainer,
     Architect = synaptic.Architect;
 var trainingSet = [];
-var dataPath = "data/trainingdata";
+var dataPath = "data/trainingdata.json";
 module.exports.dataPath = dataPath;
 module.exports.trainingSet = trainingSet;
 function Perceptron(input, hidden, output){
