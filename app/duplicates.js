@@ -10,7 +10,6 @@ const data = JSON.parse(S(fs.readFileSync('data/trainingdata.json')).ensureLeft(
 const unique = []
 
 function comparator (a, b) {
-  console.log(a)
   for (var i = 0; i < 9; i++) {
     if (!(a.input[i] === b.input[i] && a.output[i] === b.output[i])) return false
     else return true
