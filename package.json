@@ -4,7 +4,7 @@
   "description": "Neural Network That Crowdsources Strategies for TicTacToe!",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/bigTest.js app/test/NNtest.js",
     "start": "node server.js"
   },
   "repository": {
