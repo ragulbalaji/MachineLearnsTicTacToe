@@ -1,14 +1,13 @@
 var fs = require('fs'),
-    _string = require('string');
-
+    _string = require('string'),
+    synaptic = require('synaptic');
 var Neuron = synaptic.Neuron,
     Layer = synaptic.Layer,
     Network = synaptic.Network,
     Trainer = synaptic.Trainer,
     Architect = synaptic.Architect;
-
-var trainingSet=[];
-
+var trainingSet = [];
+module.exports.trainingSet = trainingSet;
 function Perceptron(input, hidden, output){
   // create the layers
   var inputLayer = new Layer(input);
@@ -25,36 +24,37 @@ function Perceptron(input, hidden, output){
     output: outputLayer
   });
 }
+function loadTrainingData() {
+    fs.readFile("data/trainingdata.json", function (err, data) {
+        if (err) {
+            console.error("File read error", err);
+            return;
+        }
+        var toParse = _string(data).ensureLeft('[')
+            .ensureRight(']').replaceAll('}{', '},{').s; //var created for readability
 
-function loadTraningData() {
-  fs.readFile("data/trainingdata.json", function(err, data) {
-    if (err) {
-      console.error("File read error", err);
-      return;
-    }
-    var toParse = _string(data).ensureLeft('[')
-      .ensureRight(']').replaceAll('}{','},{').s; //var created for readability
+        trainingSet = JSON.parse(toParse);
 
-    trainingSet = JSON.parse(toParse);
-
-    if(trainingSet.length > 10) {
-      trainer.train(trainingSet, {
-        rate:0.01,
-        iterations:100000, // This seem very very excessive
-        log:250,
-        error:0.05,
-        cost:Trainer.cost.CROSS_ENTROPY
-      });
-    }
-  });
+        if (trainingSet.length > 10) {
+            trainer.train(trainingSet, {
+                rate: 0.01,
+                iterations: 100000, // This seem very very excessive
+                log: 250,
+                error: 0.05,
+                cost: Trainer.cost.CROSS_ENTROPY
+            });
+        }
+    });
 }
-
+module.exports.loadTrainingData = loadTrainingData;
 // extend the prototype chain
 Perceptron.prototype = new Network();
 Perceptron.prototype.constructor = Perceptron;
 
 var myPerceptron = new Perceptron(9,81,9);
 var trainer = new Trainer(myPerceptron);
+
+loadTrainingData();
 
 function flipCell(cell, index, board) {
   switch (cell) {
@@ -69,7 +69,7 @@ function flipCell(cell, index, board) {
 
 var learningRate = 0.3;
 
-function learnMove(move) {
+module.exports.learnMove = function learnMove(move) {
   if(move.currentPlayer === "O") {
     move.board.forEach(flipCell);
   }
@@ -98,7 +98,7 @@ function algorithm(move) {
   }
 }
 
-function makeGuess(move) {
+module.exports.makeGuess = function makeGuess(move) {
   if (move.currentPlayer === "O") {
     move.board.forEach(flipCell);
   }

@@ -35,7 +35,7 @@ function loadStats() {
     stats = JSON.parse(data);
   });
 }
-
+loadStats();
 module.exports.stats = stats;
 module.exports.saveStats = saveStats;
 module.exports.loadStats = loadStats;

@@ -17,8 +17,8 @@ var synaptic = require('synaptic'),
     fs = require('fs'),
     S = require('string'),
     duplicates = require("./app/duplicates.js"),
-    stats = require('./app/statistics.js');
-    
+    stats = require('./app/statistics.js'),
+    neural = require('./app/neural.js');
 const expressPort = 8081;
 
 app.use(express.static(__dirname + '/public'));
@@ -36,12 +36,12 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.post('/guess', function(req, res) {
-  var guess = makeGuess(req.body);
+  var guess = neural.makeGuess(req.body);
   res.json(guess);
 });
 
 app.post('/traindatain',function(req, res) {
-  learnMove(req.body)
+  neural.learnMove(req.body)
   res.sendStatus(200);
 });
 
@@ -65,5 +65,5 @@ app.get('/draw', function(req,res) {
 });
 
 app.get('/stats',function(req, res) {
-  res.send(JSON.stringify(stats.loadStats()));
+  res.send(JSON.stringify(stats.stats));
 });
