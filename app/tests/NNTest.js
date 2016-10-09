@@ -2,9 +2,7 @@
 var fs = require('fs');
 var neural = require('../neural.js');
 describe('Neural Network', function () {
-    before(function(){
-        fs.createReadStream("../../data/trainingdata.json").pipe(fs.createWriteStream("../../data/oldtrainingdata.json"));
-    });
+    fs.createReadStream("../../data/trainingdata.json").pipe(fs.createWriteStream("../../data/oldtrainingdata.json"));
     neural.dataPath = "../../data/trainingdata.json";
     it('loadTrainingData', function () {
         var a = {
@@ -58,7 +56,5 @@ describe('Neural Network', function () {
             assert.ok(index >= 0 && index <= 8);
         });
     });
-    after(function() {
-        fs.createReadStream("../../data/trainingdata.json").pipe(fs.createWriteStream("../../data/oldtrainingdata.json"));
-    });
+    fs.createReadStream("../../data/trainingdata.json").pipe(fs.createWriteStream("../../data/oldtrainingdata.json"));
 });
