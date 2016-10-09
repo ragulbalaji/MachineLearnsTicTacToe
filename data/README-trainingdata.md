@@ -1,7 +1,8 @@
 So the serialization of the game is as follows.
 
 Each move is serialized as an object containing an input output pair:
-`{input:[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],output:{0,0,0,0,0,0,0,0,1}}`
+
+`{input:[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],output:[0,0,0,0,0,0,0,0,1]}`
 
 Where input is an array representing the input to the Neural net. 0 is an opponent occupied square, 0.5 is empty, and 1 is a square occupied by the computer
 
