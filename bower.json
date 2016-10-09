@@ -1,0 +1,22 @@
+{
+  "name": "machinelearnstictactoe",
+  "description": "Neural Network That Crowdsources Strategies for TicTacToe!",
+  "main": "public/index.html",
+  "authors": [
+    "ragulbalaji"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/ragulbalaji/MachineLearnsTicTacToe",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "materialize": "^0.97.7",
+    "chance": "^1.0.4"
+  }
+}
