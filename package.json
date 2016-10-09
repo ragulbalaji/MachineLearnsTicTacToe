@@ -20,6 +20,7 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "ramda": "^0.22.1",
     "string": "^3.3.1",
     "synaptic": "^1.0.8"
   }
