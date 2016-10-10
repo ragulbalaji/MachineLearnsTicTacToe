@@ -71,6 +71,6 @@ app.get('/draw', function(req,res) {
 app.get('/stats',function(req, res) {
   res.send(JSON.stringify(stats.stats));
 });
-neural.train(100000);
 out();
 initialized = true;
+neural.train(100000);
