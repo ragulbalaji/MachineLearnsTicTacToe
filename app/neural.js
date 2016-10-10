@@ -7,6 +7,8 @@ var Neuron = synaptic.Neuron,
     Trainer = synaptic.Trainer,
     Architect = synaptic.Architect;
 var trainingSet = [];
+var dataPath = "data/trainingdata.json";
+module.exports.dataPath = dataPath;
 module.exports.trainingSet = trainingSet;
 function Perceptron(input, hidden, output){
   // create the layers
@@ -24,8 +26,8 @@ function Perceptron(input, hidden, output){
     output: outputLayer
   });
 }
-function loadTrainingData() {
-    fs.readFile("data/trainingdata.json", function (err, data) {
+function loadTrainingData(callback) {
+    fs.readFile(dataPath, function (err, data) {
         if (err) {
             console.error("File read error", err);
             return;
@@ -34,18 +36,21 @@ function loadTrainingData() {
             .ensureRight(']').replaceAll('}{', '},{').s; //var created for readability
 
         trainingSet = JSON.parse(toParse);
-
-        if (trainingSet.length > 10) {
-            trainer.train(trainingSet, {
-                rate: 0.01,
-                iterations: 100000, // This seem very very excessive
-                log: 250,
-                error: 0.05,
-                cost: Trainer.cost.CROSS_ENTROPY
-            });
-        }
+        if (callback) callback(true);
     });
 }
+function train(iterations) {
+    if (trainingSet.length > 10) {
+        trainer.train(trainingSet, {
+            rate: 0.01,
+            iterations: iterations, // This seem very very excessive
+            log: 250,
+            error: 0.05,
+            cost: Trainer.cost.CROSS_ENTROPY
+        });
+    }
+}
+module.exports.train = train;
 module.exports.loadTrainingData = loadTrainingData;
 // extend the prototype chain
 Perceptron.prototype = new Network();
@@ -69,7 +74,7 @@ function flipCell(cell, index, board) {
 
 var learningRate = 0.3;
 
-module.exports.learnMove = function learnMove(move) {
+module.exports.learnMove = function learnMove(move,callback) {
   if(move.currentPlayer === "O") {
     move.board.forEach(flipCell);
   }
@@ -81,15 +86,10 @@ module.exports.learnMove = function learnMove(move) {
         return;
       }
       console.log("file saved");
+      if(callback)callback(true);
   });
   console.log("training");
-  trainer.train(trainingSet,{
-    rate:0.1,
-    iterations:100,
-    log:100,
-    error:0.05,
-    cost:Trainer.cost.CROSS_ENTROPY
-  });
+  train(100);
 }
 
 function algorithm(move) {
@@ -122,3 +122,4 @@ module.exports.makeGuess = function makeGuess(move) {
   console.log(index);
   return index;
 }
+
