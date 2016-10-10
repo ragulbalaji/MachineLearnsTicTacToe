@@ -19,53 +19,56 @@ var synaptic = require('synaptic'),
     duplicates = require("./app/duplicates.js"),
     stats = require('./app/statistics.js'),
     neural = require('./app/neural.js');
-const expressPort = 8081;
+function start(port,callback) {
+    const expressPort = 8080||port;
+    app.use(express.static(__dirname + '/public'));
+    app.use(function (req, res, next) {
+        res.header('Access-Control-Allow-Origin', "*");
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+        next();
+    });
 
-app.use(express.static(__dirname + '/public'));
+    app.use(bodyParser.urlencoded({
+        extended: true
+    }));
 
-app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', "*");
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
-});
+    app.use(bodyParser.json());
 
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+    app.post('/guess', function (req, res) {
+        var guess = neural.makeGuess(req.body);
+        res.json(guess);
+    });
 
-app.use(bodyParser.json());
+    app.post('/traindatain', function (req, res) {
+        neural.learnMove(req.body)
+        res.sendStatus(200);
+    });
 
-app.post('/guess', function(req, res) {
-  var guess = neural.makeGuess(req.body);
-  res.json(guess);
-});
+    app.listen(expressPort, function () {
+        console.log("Express is running on port " + expressPort);
+    });
 
-app.post('/traindatain',function(req, res) {
-  neural.learnMove(req.body)
-  res.sendStatus(200);
-});
+    app.get('/win', function (req, res) {
+        stats.stats.addWin();
+        res.send("win ok")
+    });
 
-app.listen(expressPort, function() {
-  console.log("Express is running on port "+expressPort);
-});
+    app.get('/lose', function (req, res) {
+        stats.stats.addLose();
+        res.send("lose ok")
+    });
 
-app.get('/win',function(req, res) {
-  stats.stats.addWin();
-  res.send("win ok")
-});
+    app.get('/draw', function (req, res) {
+        stats.stats.addDraw();
+        res.send("draw ok")
+    });
 
-app.get('/lose',function(req, res) {
-  stats.stats.addLose();
-  res.send("lose ok")
-});
-
-app.get('/draw', function(req,res) {
-  stats.stats.addDraw();
-  res.send("draw ok")
-});
-
-app.get('/stats',function(req, res) {
-  res.send(JSON.stringify(stats.stats));
-});
-neural.train(100000);
-module.exports = true;
+    app.get('/stats', function (req, res) {
+        res.send(JSON.stringify(stats.stats));
+    });
+    if(callback)callback();
+}
+module.exports.initiateTraining = function initiateTraining(){
+    neural.train(100000);
+}
+module.exports.start = start;
