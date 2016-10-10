@@ -20,9 +20,13 @@ var synaptic = require('synaptic'),
     stats = require('./app/statistics.js'),
     neural = require('./app/neural.js');
 const expressPort = 8081;
-
 app.use(express.static(__dirname + '/public'));
-
+var initialized = false;
+var out = function () { };
+module.exports = function test(callback) {
+    if (initialized) callback();
+    else out = callback || function () { };
+}
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', "*");
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -68,4 +72,5 @@ app.get('/stats',function(req, res) {
   res.send(JSON.stringify(stats.stats));
 });
 neural.train(100000);
-module.exports = true;
+out();
+initialized = true;
