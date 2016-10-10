@@ -27,7 +27,7 @@ describe('Neural Network', function () {
             input: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 0.5], output: [0, 0, 1, 0, 0, 0, 0, 0, 0]
         };
         fs.writeFileSync("data/trainingdata.json", JSON.stringify(a) + JSON.stringify(b));
-        var move = { input: [1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5], output: [0, 0, 1, 0, 0, 0, 0, 0, 0] };
+        var move = { board: [1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5], currentplayer: 1, move:[0,0,0,0,0,0,1,0,0]};
         neural.loadTrainingData();
         neural.learnMove(move, function (success) {
             if (success) {
