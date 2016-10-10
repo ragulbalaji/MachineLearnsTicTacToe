@@ -67,6 +67,8 @@ function start(port,callback) {
         res.send(JSON.stringify(stats.stats));
     });
     if(callback)callback();
+}
+module.exports.initiateTraining = function initiateTraining(){
     neural.train(100000);
 }
-module.exports = start;
+module.exports.start = start;
